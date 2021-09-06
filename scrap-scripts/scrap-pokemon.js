@@ -42,10 +42,14 @@ const scrapPokemon = async (id, link, page) => {
     ".product_weight",
     (el) => el.textContent
   );
-  pokeData.additional_info.dimensions = await page.$eval(
-    ".product_dimensions",
-    (el) => el.textContent
-  );
+  try {
+    pokeData.additional_info.dimensions = await page.$eval(
+      ".product_dimensions",
+      (el) => el.textContent
+    );
+  } catch (e) {
+    pokeData.additional_info.dimensions = null;
+  }
 
   // Metadata
   pokeData.metadata = {};

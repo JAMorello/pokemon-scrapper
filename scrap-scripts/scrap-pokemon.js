@@ -1,5 +1,7 @@
-const scrapPokemon = async (page) => {
+const scrapPokemon = async (id, link, page) => {
   // This script scraps the info from a single pokemon
+
+  await page.goto(link);
 
   // Initialize object
   const pokeData = {};
@@ -8,6 +10,8 @@ const scrapPokemon = async (page) => {
   pokeData.name = await page.$eval(".product_title", (el) => el.textContent);
 
   // Product data
+  pokeData.id = id;
+  pokeData.link = link;
   pokeData.price = await page.$eval(".price", (el) =>
     parseFloat(el.textContent.slice(1))
   );
@@ -48,12 +52,12 @@ const scrapPokemon = async (page) => {
   pokeData.metadata.sku = await page.$eval(".sku", (el) =>
     parseInt(el.textContent)
   );
-  pokeData.metadata.categories = await page.$$eval(".posted_in a", (els) =>
+  pokeData.metadata.categories = await page.$$eval(".posted_in > a", (els) =>
     els.map((el) => el.textContent)
   );
-  pokeData.metadata.tags = await page.$$eval(".tagged_as a", (els) =>
-    els.map((el) => el.textContent)
-  );
+  pokeData.metadata.tags = await page.$$eval(".tagged_as > a", (els) => {
+    return els.map((el) => el.textContent);
+  });
 
   return pokeData;
 };

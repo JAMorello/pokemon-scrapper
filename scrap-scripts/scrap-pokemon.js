@@ -1,4 +1,6 @@
 const scrapPokemon = async (page) => {
+  // This script scraps the info from a single pokemon
+
   // Initialize object
   const pokeData = {};
 
@@ -17,6 +19,10 @@ const scrapPokemon = async (page) => {
   );
 
   // Descriptions
+  pokeData.img = await page.$eval(
+    ".woocommerce-product-gallery__image img",
+    (el) => el.src
+  );
   pokeData.product_detail = await page.$eval(
     ".woocommerce-product-details__short-description p",
     (el) => el.textContent
